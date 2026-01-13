@@ -1,0 +1,77 @@
+---
+title: "Proposal Figures"
+format: html
+editor: visual
+---
+
+Proposal Figures
+
+Map of public comments databases
+
+Note: cant render with high res map version
+
+```{r load packages}
+library(ggOceanMaps)
+library(ggplot2)
+library(scales)
+library(ggnewscale) #add a second scale on top of bathymetry 
+```
+
+```{r colors}
+
+phillips_colors <- c("#AA4499","#882255","#CC6677","#DDCC77","#117733",
+                     "#44AA99","#88CCEE","#332288","#302E2C","#808080")
+phillips_colors_alpha <- alpha(phillips_colors, 0.5)
+
+```
+
+```{r making the map }
+
+site_levels <- c("Orca Basin", "Chumash Heritage", "Morro Bay", "Wilkinson Basin")
+site_colors       <- setNames(phillips_colors[1:4], site_levels)
+site_colors_alpha <- setNames(phillips_colors_alpha[1:4], site_levels)
+
+#Define the map window and spacing then add points
+figure <- basemap(
+  limits       = c(-130, -60, 20, 50),
+  lon.interval = 10,
+  lat.interval = 5,
+  bathy.style  = "raster_continuous_blues", #high res
+ # bathymetry   = TRUE, #low res 
+  rotate       = FALSE
+) +
+  ggnewscale::new_scale_fill() +   # start a new fill scale AFTER bathymetry is drawn
+  geom_point(
+    data = data.frame(
+      site = factor(site_levels, levels = site_levels),
+      lon  = c(-91.3333, -121.017, -121.45, -69.50),
+      lat  = c(26.9167,   34.483,   35.32,   42.50)
+    ),
+    aes(
+      x = lon,
+      y = lat,
+      shape = site,
+      fill  = site,    # uses the new fill scale 
+      color = site     
+    ),
+    size = 4,
+    stroke = 1
+  ) +
+  scale_shape_manual(values = c(
+    "Orca Basin"       = 21,
+    "Chumash Heritage" = 22,
+    "Morro Bay"        = 24,
+    "Wilkinson Basin"  = 23
+  )) +
+  scale_fill_manual(values = site_colors_alpha) +
+  scale_color_manual(values = site_colors)
+
+print(figure)
+```
+
+```{r print a PDF}
+
+pdf("US_sites_bathymetry.pdf", width = 8, height = 6, onefile = TRUE)
+print(figure)
+dev.off()
+```
