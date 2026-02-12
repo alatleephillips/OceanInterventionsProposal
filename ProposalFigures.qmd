@@ -75,3 +75,8 @@ pdf("US_sites_bathymetry.pdf", width = 8, height = 6, onefile = TRUE)
 print(figure)
 dev.off()
 ```
+
+```{r Wes figure}
+
+
+```
