@@ -78,5 +78,42 @@ dev.off()
 
 ```{r Wes figure}
 
+# --- Two mCDR projects only (LOC-NESS + Carboniferous) ---
+mCDR_levels <- c("LOC-NESS", "Carboniferous")
+mCDR_colors       <- setNames(phillips_colors[1:2], mCDR_levels)
+mCDR_colors_alpha <- setNames(phillips_colors_alpha[1:2], mCDR_levels)
+
+mCDR_df <- data.frame(
+  project = factor(mCDR_levels, levels = mCDR_levels),
+  lon     = c(-91.3333, -69.50),  # LOC-NESS (Orca Basin), Carboniferous (Wilkinson Basin)
+  lat     = c(26.9167,   42.50)
+)
+
+figure_mCDR <- basemap(
+  limits       = c(-100, -60, 20, 50),   # tighter window for the two mCDR projects
+  lon.interval = 10,
+  lat.interval = 5,
+  bathy.style  = "raster_continuous_blues",
+  rotate       = FALSE
+) +
+  ggnewscale::new_scale_fill() +
+  geom_point(
+    data = mCDR_df,
+    aes(x = lon, y = lat, shape = project, fill = project, color = project),
+    size = 4,
+    stroke = 1
+  ) +
+  scale_shape_manual(values = c(
+    "LOC-NESS"       = 21,
+    "Carboniferous"  = 23
+  )) +
+  scale_fill_manual(values = mCDR_colors_alpha) +
+  scale_color_manual(values = mCDR_colors)
+
+print(figure_mCDR)
+
+pdf("mCDRsites.pdf", width = 6, height = 6, onefile = TRUE)
+print(figure_mCDR)
+dev.off()
 
 ```
