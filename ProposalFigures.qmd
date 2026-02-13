@@ -78,7 +78,7 @@ dev.off()
 
 ```{r Wes figure}
 
-# --- Two mCDR projects only (LOC-NESS + Carboniferous) ---
+# --- mCDR projects only for Wes ---
 mCDR_levels <- c("LOC-NESS", "Carboniferous")
 mCDR_colors       <- setNames(phillips_colors[1:2], mCDR_levels)
 mCDR_colors_alpha <- setNames(phillips_colors_alpha[1:2], mCDR_levels)
