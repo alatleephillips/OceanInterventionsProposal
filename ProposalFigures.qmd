@@ -69,6 +69,68 @@ figure <- basemap(
 print(figure)
 ```
 
+```{r}
+
+site_levels <- c("Orca Basin", "Chumash Heritage", "Morro Bay", "Wilkinson Basin",
+                 "Alaska OCS")
+site_colors       <- setNames(phillips_colors[1:5], site_levels)
+site_colors_alpha <- setNames(phillips_colors_alpha[1:5], site_levels)
+
+# defining sites for mapping
+base_sites <- data.frame(
+  site = factor(site_levels[1:4], levels = site_levels),
+  lon  = c(-91.3333, -121.017, -121.45, -69.50),
+  lat  = c(26.9167, 34.483, 35.32, 42.50)
+)
+
+alaska_sites <- data.frame(
+  site = factor(rep("Alaska OCS", 6), levels = site_levels),
+  lon = c(-163.8, -162.2, -170.5, -150.0, -156.5, -147.5),
+  lat = c(64.6, 59.3, 52.8, 73.0, 74.2, 56.3)
+)
+
+map_sites <- rbind(base_sites, alaska_sites)
+
+# Define the map window and spacing then add points
+figure <- basemap(
+  limits       = c(-175, -60, 20, 80),
+  lon.interval = 20,
+  lat.interval = 10,
+  bathy.style  = "raster_continuous_blues",
+# bathymetry   = TRUE,
+  rotate       = FALSE
+) +
+  ggnewscale::new_scale_fill() +
+  ggnewscale::new_scale_color() +
+  
+# adding points
+  geom_point(
+  data = map_sites,
+  aes(
+    x = lon,
+    y = lat,
+    shape = site,
+    fill = site,
+    color = site
+  ),
+  size = 4,
+  stroke = 1
+) +
+
+# Giving points symbols
+  scale_shape_manual(values = c(
+    "Orca Basin"       = 21,
+    "Chumash Heritage" = 22,
+    "Morro Bay"        = 24,
+    "Wilkinson Basin"  = 23,
+    "Alaska OCS"       = 25    
+  )) +
+  scale_fill_manual(values = site_colors_alpha) +
+  scale_color_manual(values = site_colors)
+
+print(figure)
+```
+
 ```{r print a PDF}
 
 pdf("US_sites_bathymetry.pdf", width = 8, height = 6, onefile = TRUE)
