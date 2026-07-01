@@ -25,7 +25,7 @@ phillips_colors_alpha <- alpha(phillips_colors, 0.5)
 
 ```
 
-```{r making the map }
+```{r making the map(original)}
 
 site_levels <- c("Orca Basin", "Chumash Heritage", "Morro Bay", "Wilkinson Basin")
 site_colors       <- setNames(phillips_colors[1:4], site_levels)
@@ -69,7 +69,7 @@ figure <- basemap(
 print(figure)
 ```
 
-```{r}
+```{r making the map w/ Alaska}
 
 site_levels <- c("Orca Basin", "Chumash Heritage", "Morro Bay", "Wilkinson Basin",
                  "Alaska OCS")
